@@ -1,6 +1,8 @@
 package blog.Blog_backend.dto;
 
+import blog.Blog_backend.entities.enums.PostStatus;
 import jakarta.validation.constraints.NotBlank;
+
 import java.util.List;
 
 public class PostRequestDTO {
@@ -8,7 +10,7 @@ public class PostRequestDTO {
     @NotBlank(message = "O título é obrigatório")
     private String title;
 
-    @NotBlank(message = "O slug é obrigatório")
+    // Opcional: se vier vazio, é gerado a partir do título
     private String slug;
 
     private String summary;
@@ -17,8 +19,13 @@ public class PostRequestDTO {
     private String content;
 
     private String coverImage;
-    private String status;
+
+    // Se não vier, o post é criado como DRAFT
+    private PostStatus status;
+
+    // Temporário: quando tiver JWT, o autor sai do usuário logado
     private String authorId;
+
     private String categoryName;
     private String categorySlug;
     private List<String> tags;
@@ -41,8 +48,8 @@ public class PostRequestDTO {
     public String getCoverImage() { return coverImage; }
     public void setCoverImage(String coverImage) { this.coverImage = coverImage; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public PostStatus getStatus() { return status; }
+    public void setStatus(PostStatus status) { this.status = status; }
 
     public String getAuthorId() { return authorId; }
     public void setAuthorId(String authorId) { this.authorId = authorId; }

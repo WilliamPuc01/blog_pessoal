@@ -1,7 +1,7 @@
 package blog.Blog_backend.controller;
 
 import blog.Blog_backend.dto.PostRequestDTO;
-import blog.Blog_backend.entities.Post;
+import blog.Blog_backend.dto.PostResponseDTO;
 import blog.Blog_backend.services.PostService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/** CRUD de posts do admin (inclui rascunhos). Proteger com JWT no próximo passo. */
 @RestController
-@RequestMapping("/admin/posts")
+@RequestMapping("/api/admin/posts")
 public class AdminPostController {
 
     private final PostService postService;
@@ -21,25 +22,23 @@ public class AdminPostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> cadastrar(@Valid @RequestBody PostRequestDTO dto) {
-        Post novoPost = postService.salvar(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoPost);
+    public ResponseEntity<PostResponseDTO> cadastrar(@Valid @RequestBody PostRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(postService.salvar(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<Post>> listarTodos() {
+    public ResponseEntity<List<PostResponseDTO>> listarTodos() {
         return ResponseEntity.ok(postService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> buscarPorId(@PathVariable String id) {
+    public ResponseEntity<PostResponseDTO> buscarPorId(@PathVariable String id) {
         return ResponseEntity.ok(postService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Post> alterar(@PathVariable String id, @Valid @RequestBody PostRequestDTO dto) {
-        Post postAtualizado = postService.alterar(id, dto);
-        return ResponseEntity.ok(postAtualizado);
+    public ResponseEntity<PostResponseDTO> alterar(@PathVariable String id, @Valid @RequestBody PostRequestDTO dto) {
+        return ResponseEntity.ok(postService.alterar(id, dto));
     }
 
     @DeleteMapping("/{id}")

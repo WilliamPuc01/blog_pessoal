@@ -6,6 +6,8 @@ import blog.Blog_backend.dto.UserRequestDTO;
 import blog.Blog_backend.dto.UserResponseDTO;
 import blog.Blog_backend.entities.User;
 import blog.Blog_backend.entities.enums.Role;
+import blog.Blog_backend.exceptions.ConflictException;
+import blog.Blog_backend.exceptions.ResourceNotFoundException;
 import blog.Blog_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,7 @@ public class UserService {
 
     public UserResponseDTO salvar(UserRequestDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("E-mail já cadastrado");
+            throw new ConflictException("E-mail já cadastrado");
         }
 
         User user = new User();
@@ -48,7 +50,7 @@ public class UserService {
 
     public UserResponseDTO buscarPorId(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
         return new UserResponseDTO(user);
     }
 }

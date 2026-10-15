@@ -1,6 +1,8 @@
 package blog.Blog_backend.entities;
 
 import org.springframework.data.annotation.Id;
+import blog.Blog_backend.entities.enums.PostStatus;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "posts")
+@CompoundIndex(name = "status_publishedAt", def = "{'status': 1, 'publishedAt': -1}")
 public class Post implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -26,7 +29,7 @@ public class Post implements Serializable {
     private String summary;
     private String content;
     private String coverImage;
-    private String status;
+    private PostStatus status;
 
     // Referência para a coleção 'users' conforme o diagrama
     @DocumentReference
@@ -45,7 +48,7 @@ public class Post implements Serializable {
     }
 
     public Post(String id, String title, String slug, String summary, String content,
-                String coverImage, String status, User author, Category category,
+                String coverImage, PostStatus status, User author, Category category,
                 List<String> tags, Date publishedAt, Date createdAt, Date updatedAt) {
         this.id = id;
         this.title = title;
@@ -111,11 +114,11 @@ public class Post implements Serializable {
         this.coverImage = coverImage;
     }
 
-    public String getStatus() {
+    public PostStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PostStatus status) {
         this.status = status;
     }
 
